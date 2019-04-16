@@ -1,12 +1,25 @@
+/*
+*  Simple Node js Express application for CRUD of tasks in a todo list
+*  Author: Alex Bleda
+*  Created: 04/15/2019
+*/
+
+// Dependencies
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const morgan = require('morgan')
 
-const routes = require('../routes/routes.js')
+// Routes
+const taskRoutes = require('../routes/taskRoutes.js')
 const posts = require('../routes/posts.js')
 
+// Express Instance
 const app = express()
+
+// Config file
+var config = require('./config');
+
 app.use(morgan('combined'))
 app.use(bodyParser.json())
 app.use(cors())
@@ -40,7 +53,9 @@ db.once("open", function(callback){
 });
 
 // Route set up
-app.use('/api', routes)
+app.use('/api', taskRoutes)
 app.use('/', posts)
 
 app.listen(process.env.PORT || 8081)
+
+module.exports = app

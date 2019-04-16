@@ -1,0 +1,12 @@
+FROM venom-docker_server
+
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.2.1/wait /wait
+
+RUN chmod +x /wait
+
+# Copy or mount node app here
+WORKDIR /data/
+
+EXPOSE 8082
+
+CMD /wait && npm test
