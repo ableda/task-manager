@@ -9,10 +9,9 @@ describe('Models', function() {
   var Task;
 
   beforeEach(function(done) {
-    mongoose.connect('mongodb://localhost/posts', { useNewUrlParser: true });
+    mongoose.connect('mongodb://localhost/database-test', { useNewUrlParser: true });
     mongoose.connection.once('connected', () => {
-      mongoose.connection.db.dropDatabase();
-
+      //mongoose.connection.db.dropDatabase();
       Task = require('../models/task')
       done();
     });

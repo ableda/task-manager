@@ -27,8 +27,10 @@ app.use(cors())
 // DB Setup
 var mongoose = require('mongoose');
 
-var DATABASE_URL = process.env.DATABASE_URL || 'http://localhost'
-mongoose.connect(`mongodb://${DATABASE_URL}/posts`, { useNewUrlParser: true });
+var DATABASE_URL = process.env.DATABASE_URL || 'localhost'
+const dbName = process.env.NODE_ENV === 'dev' ? 'database-test' : 'database'
+
+mongoose.connect(`mongodb://${DATABASE_URL}/${dbName}`, { useNewUrlParser: true });
 
 var db = mongoose.connection;
 
@@ -56,6 +58,8 @@ db.once("open", function(callback){
 app.use('/api', taskRoutes)
 app.use('/', posts)
 
-app.listen(process.env.PORT || 8081)
+app.listen(process.env.PORT || 8081, function() {
+  app.emit('APP_STARTED')
+})
 
 module.exports = app

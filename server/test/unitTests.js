@@ -6,14 +6,21 @@ const Task = require('../models/task')
 const app = require('../src/app')
 let taskId
 
-// Config file
+// Config file & DB Setup
 var config = require('../src/config');
+var mongoose = require('mongoose');
+
+const dbName = process.env.NODE_ENV === 'dev' ? 'database-test' : 'database'
+
+/*
+* TESTS ONLY RUNNING after an initial post to the database
+* It is then clearing the database every time... Is it the mongoose connections???
+*/
 
 // Need to connect to a test-database from config or environment file
 before(done => {
-	mongoose.connect(config.mongoURI['test'], { useNewUrlParser: true });
+	mongoose.connect(`mongodb://localhost/database-test`, { useNewUrlParser: true });
     mongoose.connection.once('connected', () => {
-      mongoose.connection.db.dropDatabase();
       done();
     });
 })
@@ -26,6 +33,7 @@ after(done => {
 describe('API Tests', () => {
 	it('Runs all CRUD tests', done => {
 		test('api/tasks', assert => {
+			console.log("running first request");
 			request(app)
 				.post('/api/tasks')
 				.send(new Task({
@@ -101,6 +109,7 @@ describe('API Tests', () => {
 		})
 
 		test('/api/tasks/:id', assert => {
+			console.log("Deleting task id: ", taskId);
 			request(app)
 				.delete(`/api/tasks/${taskId}`)
 				.expect(200)
