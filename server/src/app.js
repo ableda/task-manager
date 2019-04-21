@@ -9,7 +9,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
-const path = require('path')
 const morgan = require('morgan')
 
 // Routes
@@ -18,6 +17,9 @@ const taskRoutes = require('../routes/taskRoutes.js')
 // Swagger API Documentation
 var swaggerUi = require('swagger-ui-express'),
     swaggerJSDoc = require('swagger-jsdoc');
+
+// Config file
+var config = require('./config');
 
 // Express Instance
 const app = express()
@@ -29,8 +31,8 @@ var swaggerDefinition = {
     version: '1.0.0',
     description: 'CRUD Operations for getting, creating, editing and deleting tasks.',
   },
-  host: 'localhost:8081',
-  basePath: '/api/',
+  host: config.api.url,
+  basePath: config.api.base,
 };
 // options for the swagger docs
 var options = {
@@ -43,9 +45,6 @@ var options = {
 // initialize swagger-jsdoc
 var swaggerSpec = swaggerJSDoc(options);
 
-// Config file
-var config = require('./config');
-
 app.use(morgan('combined'))
 app.use(bodyParser.json())
 app.use(cors())
@@ -53,10 +52,7 @@ app.use(cors())
 // DB Setup
 var mongoose = require('mongoose');
 
-var DATABASE_URL = process.env.DATABASE_URL || 'localhost'
-const dbName = process.env.NODE_ENV === 'dev' ? 'database-test' : 'database'
-
-mongoose.connect(`mongodb://${DATABASE_URL}/${dbName}`, { useNewUrlParser: true });
+mongoose.connect(`mongodb://${config.db.host}/${config.db.name}`, { useNewUrlParser: true });
 
 var db = mongoose.connection;
 
@@ -66,7 +62,7 @@ db.on('error', function (error) {
   // See: https://github.com/Automattic/mongoose/issues/5169
   if (error.message && error.message.match(/failed to connect to server .* on first connect/)) {
     setTimeout(function () {
-      mongoose.connect(`mongodb://${DATABASE_URL}/posts`, { useNewUrlParser: true }).catch(() => {
+      mongoose.connect(`mongodb://${config.db.host}/${config.db.name}`, { useNewUrlParser: true }).catch(() => {
         // empty catch avoids unhandled rejections
       });
     }, 20 * 1000);
@@ -82,7 +78,7 @@ db.once("open", function(callback){
 
 // Routes set up
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-app.use('/api', taskRoutes)
+app.use(config.api.base, taskRoutes)
 
 app.listen(process.env.PORT || 8081, function() {
   app.emit('APP_STARTED')

@@ -7,18 +7,19 @@ services:
       context: ./server
       dockerfile: Dockerfile.test
     ports:
-      - 8081:8081
+      - ${SERVER_PORT}:${SERVER_PORT}
     volumes:
       - ./server:/data
-    depends_on: 
+    depends_on:
       - server-test-database
     environment:
-      - DATABASE_URL=server-database:27017
-    
+      - WAIT_HOSTS=${TEST_DB_URL}
+      - DATABASE_URL=${TEST_DB_URL}
+
   server-test-database:
     image: mongo
     ports:
       - 27017:27017
     volumes:
-      - ./db:/data/db
+      - ./db:/data/test_db
     #command: "mongod --smallfiles --logpath=${MONGO_LOG_FILE}"

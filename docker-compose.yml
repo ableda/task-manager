@@ -20,17 +20,17 @@ services:
       - ${SERVER_PORT}:${SERVER_PORT}
     volumes:
       - ./server:/data
-    depends_on: 
+    depends_on:
       - server-database
     environment:
-      - WAIT_HOSTS=server-database:27017
-      - DATABASE_URL=server-database:27017
-    
+      - WAIT_HOSTS=${DB_URL}
+      - DATABASE_URL=${DB_URL}
+
   server-database:
     image: mongo
+    env_file:
+      - .env
     ports:
-      - 27017:27017
+      - ${DB_PORT}:${DB_PORT}
     volumes:
       - ./db:/data/db
-
-    

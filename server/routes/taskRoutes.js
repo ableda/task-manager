@@ -70,7 +70,6 @@ router.get('/tasks', (req, res) => {
           $lte: moment(req.query.date).endOf('day').toDate()
         }
       }
-      console.log(filter)
     }
     if ((("startDate" in req.query) && req.query.startDate && req.query.startDate.length) &&
        (("endDate" in req.query) && req.query.endDate && req.query.endDate.length)) {
@@ -238,7 +237,7 @@ router.put('/tasks/:id', (req, res) => {
  */
 router.delete('/tasks/:id', (req, res) => {
   var db = req.db;
-  Task.remove({
+  Task.deleteOne({
     _id: req.params.id
   }, function(error, task){
     if (error) {
