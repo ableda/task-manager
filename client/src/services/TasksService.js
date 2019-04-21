@@ -2,8 +2,13 @@ import Api from '@/services/Api'
 
 export default {
   // Get all tasks
-  fetchTasks () {
+  fetchAllTasks () {
     return Api().get('tasks')
+  },
+
+  // Get Tasks for today
+  fetchFilterTasks (params) {
+    return Api().get('tasks', {params: params})
   },
 
   // Post new task

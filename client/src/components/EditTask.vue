@@ -14,6 +14,9 @@
         <div>
           <button class="app_task_btn" @click="updateTask">Update</button>
         </div>
+        <div>
+          <router-link v-bind:to="{ name: 'Tasks'}">Back to Task List</router-link>
+        </div>
       </div>
   </div>
 </template>
