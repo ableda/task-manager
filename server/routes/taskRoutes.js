@@ -5,19 +5,54 @@ var Task = require("../models/task");
 const router = express.Router()
 
 /**
-* @api {get} /api/tasks Get tasks
-* @apiName Get all tasks
-* @apiPermission none
-* @apiGroup Task
-*
-* Sorting/Filtering included in query params
-*
-* @queryParam  {Date} [date] Date
-* @queryParam  {Boolean} [done] Done
-* @queryParam  {Boolean} [overdue] Overdue
-*
-* @apiSuccess (200) {Object} mixed `Task` object
-*/
+ * @swagger
+ * definition:
+ *   tasks:
+ *     properties:
+ *       name:
+ *         type: string
+ *       description:
+ *         type: string
+ *       done:
+ *         type: boolean
+ *       date:
+ *         type: string
+ */
+/**
+ * @swagger
+ * /tasks:
+ *   get:
+ *     tags:
+ *       - tasks
+ *     description: Return tasks
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: date
+ *         in: query
+ *         description: Filter tasks by single date, any time of day will work
+ *       - name: startDate
+ *         in: query
+ *         description: Filter tasks by start and end date.
+ *       - name: endDate
+ *         in: query
+ *         description: Filter tasks by start and end date.
+ *       - name: done
+ *         in: query
+ *         description: Filter tasks by those which are done or not done.
+ *         schema:
+ *           type: boolean
+ *       - name: overdue
+ *         in: query
+ *         description: Filter tasks by those which are overdue (past date and not done).
+ *         schema:
+ *           type: boolean
+ *     responses:
+ *       200:
+ *         description: status [true, false], array of tasks
+ *         schema:
+ *           $ref: '#/definitions/tasks'
+ */
 router.get('/tasks', (req, res) => {
   var filter = {};
 
@@ -35,6 +70,7 @@ router.get('/tasks', (req, res) => {
           $lte: moment(req.query.date).endOf('day').toDate()
         }
       }
+      console.log(filter)
     }
     if ((("startDate" in req.query) && req.query.startDate && req.query.startDate.length) &&
        (("endDate" in req.query) && req.query.endDate && req.query.endDate.length)) {
@@ -53,16 +89,12 @@ router.get('/tasks', (req, res) => {
     }
     // Done parameter has to be either true or false
     else if (("done" in req.query) && (req.query.done === 'true' || req.query.done === 'false')) {
-      filter = {
-        done: req.query.done == 'true'
-      }
+      filter = { done: req.query.done == 'true' }
     }
     // Overdue tasks, by definition, due before today and not completed
     else if (("overdue" in req.query) && (req.query.overdue === 'true' || req.query.overdue === 'false')) {
       filter = {
-        date: {
-          $lte: moment().startOf('day').toDate()
-        },
+        date: { $lte: moment().startOf('day').toDate() },
         done: false
       }
     }
@@ -76,25 +108,28 @@ router.get('/tasks', (req, res) => {
     res.send({ status: true, tasks: tasks })
 
   }).sort({date:-1})
-
 });
 
-
 /**
-* @api {post} /api/tasks Post a new task
-* @apiName Get all tasks
-* @apiPermission none
-* @apiGroup Task
-*
-* Sorting/Filtering included in query params
-*
-* @apiParam  {String} [name] Name of task - required
-* @apiParam  {String} [description] Description of task
-* @apiParam  {Boolean} [done] Done
-* @apiParam  {Date} [date] Date
-*
-* @apiSuccess (200) {Object} mixed `Task` object
-*/
+ * @swagger
+ * /tasks:
+ *   post:
+ *     tags:
+ *       - tasks
+ *     description: Creates a new task
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: task
+ *         description: task object
+ *         in: body
+ *         required: true
+ *         schema:
+ *           $ref: '#/definitions/tasks'
+ *     responses:
+ *       200:
+ *         description: Task saved successfully!
+ */
 router.post('/tasks', (req, res) => {
   var db = req.db;
   var new_task = new Task({
@@ -114,11 +149,24 @@ router.post('/tasks', (req, res) => {
 })
 
 /**
-* GET task by specific id
-*
-* @param id
-* @return array
-*/
+ * @swagger
+ * /tasks/{id}:
+ *   get:
+ *     tags:
+ *       - tasks
+ *     description: Returns a single task
+ *     produces: application/json
+ *     parameters:
+ *       - name: id
+ *         description: tasks' id
+ *         in: path
+ *         required: true
+ *         type: string
+
+ *     responses:
+ *       200:
+ *         description: Task updated successfully!
+ */
 router.get('/tasks/:id', (req, res) => {
   var db = req.db;
   Task.findById(req.params.id, 'name description date done', function (error, task) {
@@ -130,7 +178,25 @@ router.get('/tasks/:id', (req, res) => {
   })
 })
 
-// Update a task
+/**
+ * @swagger
+ * /tasks/{id}:
+ *   put:
+ *     tags:
+ *       - tasks
+ *     description: Updates a single task
+ *     produces: application/json
+ *     parameters:
+ *       name: task
+ *       in: body
+ *       description: Fields for the task resource
+ *       schema:
+ *         type: array
+ *         $ref: '#/definitions/task'
+ *     responses:
+ *       200:
+ *         description: Task updated successfully!
+ */
 router.put('/tasks/:id', (req, res) => {
   var db = req.db;
   Task.findById(req.params.id, 'name description date done', function (error, task) {
@@ -146,12 +212,30 @@ router.put('/tasks/:id', (req, res) => {
         console.log(error)
         res.send({ status: false, error: error.message })
       }
-      res.send({ status: true, message: "Task updated successfully"})
+      res.send({ status: true, message: "Task updated successfully!"})
     })
   })
 })
 
-// Delete a task
+/**
+ * @swagger
+ * /tasks/{id}:
+ *   delete:
+ *     tags:
+ *       - tasks
+ *     description: Deletes a single task
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: id
+ *         description: tasks' id
+ *         in: path
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Task deleted successfully!
+ */
 router.delete('/tasks/:id', (req, res) => {
   var db = req.db;
   Task.remove({
@@ -161,7 +245,7 @@ router.delete('/tasks/:id', (req, res) => {
       console.log(error);
       res.send({ status: false, error: error })
     }
-    res.send({ status: true, message: "Task deleted successfully" })
+    res.send({ status: true, message: "Task deleted successfully!" })
   })
 })
 

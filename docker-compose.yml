@@ -3,17 +3,21 @@ version: "3"
 services:
   client:
     build: ./client
+    env_file:
+      - .env
     ports:
-      - 8080:8080
+      - ${CLIENT_PORT}:${CLIENT_PORT}
     volumes:
       - ./client:/data
     environment:
-      - API_URL=http://localhost:8081/
+      - API_URL=${API_URL}
 
   server:
     build: ./server
+    env_file:
+      - .env
     ports:
-      - 8081:8081
+      - ${SERVER_PORT}:${SERVER_PORT}
     volumes:
       - ./server:/data
     depends_on: 

@@ -3,15 +3,13 @@
     <h1>Tasks</h1>
 
     <div class="selector-container">
-      <button class="task-select" :class="{selected: activeFilter == 1}" v-on:click="filter($event)" @click="activeFilter=1">Today</button>
-      <button class="task-select" :class="{selected: activeFilter == 2}" v-on:click="filter($event)" @click="activeFilter=2">Tomorrow</button>
-      <button class="task-select" :class="{selected: activeFilter == 3}" v-on:click="filter($event)" @click="activeFilter=3">Today/Tomorrow</button>
-      <button class="task-select" :class="{selected: activeFilter == 4}" v-on:click="filter($event)" @click="activeFilter=4">Overdue</button>
-      <button class="task-select" :class="{selected: activeFilter == 5}" v-on:click="filter($event)" @click="activeFilter=5">Completed</button>
-      <button class="task-select" :class="{selected: activeFilter == 6}" v-on:click="filter($event)" @click="activeFilter=6">All</button>
+      <button v-bind:key="btn"  v-for="btn in filterBtns" class="task-select" :class="{selected: activeFilter == btn}" v-on:click="filter($event)" @click="activeFilter=btn">{{ btn }}</button>
     </div>
 
     <div v-if="tasks.length > 0" class="table-wrap">
+      <div class="new-button">
+        <router-link v-bind:to="{ name: 'NewTask' }">Add Task</router-link>
+      </div>
       <table>
         <tr>
           <td>Done</td>
@@ -21,21 +19,18 @@
           <td width="100" align="center">Action</td>
         </tr>
         <tr v-bind:key="task._id" v-for="task in tasks">
-          <td align="center" v-bind:class="taskClass(task)">
-            <input type="checkbox" id="checkbox" v-model="task.done" @change="check(task, $event)">
+          <td align="center" v-bind:class="rowClass(task)">
+            <input type="checkbox" id="checkbox" v-model="task.done" @change="checkTask(task, $event)">
           </td>
-          <td v-bind:class="taskClass(task)">{{ task.date | moment }}</td>
-          <td v-bind:class="taskClass(task)">{{ task.name }}</td>
-          <td class="description" v-bind:class="taskClass(task)">{{ task.description }}</td>
+          <td v-bind:class="rowClass(task)">{{ task.date | moment }}</td>
+          <td v-bind:class="rowClass(task)">{{ task.name }}</td>
+          <td class="description" v-bind:class="rowClass(task)">{{ task.description }}</td>
           <td align="center">
             <router-link v-bind:to="{ name: 'EditTask', params: { id: task._id } }">Edit</router-link> |
             <a href="#" @click="deleteTask(task._id)">Delete</a>
           </td>
         </tr>
       </table>
-      <div class="new-button">
-        <router-link v-bind:to="{ name: 'NewTask' }">Add Task</router-link>
-      </div>
     </div>
     <div v-else>
       There are no tasks... Lets add one now <br /><br />
@@ -53,7 +48,8 @@ export default {
   data () {
     return {
       tasks: [],
-      activeFilter: 1
+      activeFilter: 'All',
+      filterBtns: ['Today', 'Tomorrow', 'Today/Tomorrow', 'Overdue', 'Completed', 'All']
     }
   },
   filters: {
@@ -65,9 +61,9 @@ export default {
     this.getTasks()
   },
   methods: {
-    taskClass (task) {
-      var today = moment().startOf('day')
-      var tomorrow = moment().add(1, 'days').endOf('day')
+    rowClass (task) {
+      var today = moment().local().startOf('day')
+      var tomorrow = moment().local().add(1, 'days').endOf('day')
 
       return {
         'complete': task.done,
@@ -86,7 +82,7 @@ export default {
       this.getTasks()
       this.$router.push({ name: 'Tasks' })
     },
-    async check (task, event) {
+    async checkTask (task, event) {
       await TasksService.updateTask({
         id: task._id,
         name: task.name,
@@ -188,6 +184,7 @@ a.add_task_link {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+  max-width: 550px;
 }
 
 .overdue {
