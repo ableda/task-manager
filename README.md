@@ -1,5 +1,7 @@
 # Task Manager Application
-Vue, Express, Node, Mongo with Docker-compose setup for local development. Hot Reload, SASS live compilation, among other goodies :)  
+Vue, Express, Node, Mongo with Docker-compose setup for local development. Hot Reload, SASS live compilation, among other goodies :)
+
+The application lets you
 
 ### Steps to Run
 
@@ -7,9 +9,10 @@ Vue, Express, Node, Mongo with Docker-compose setup for local development. Hot R
 
 > git clone https://github.com/ableda/task-manager.git
 
-2. Navigate into the directory VENoM-Docker
+2. Navigate into the directory task-manager and copy environment variables
 
 > cd your-path-to/task-manager
+> cp example.env .env
 
 3. Build Docker Images
 
