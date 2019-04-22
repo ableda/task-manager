@@ -60,9 +60,11 @@ describe('Tasks Rendering', () => {
     var description = wrapper.find("textarea")
     description.setValue('Edit description updated')
 
-    // Simulate Delete button click
+    // Expect component data to be updated correctly
     expect(wrapper.vm.name).toBe('Edit name updated')
     expect(wrapper.vm.description).toBe('Edit description updated')
-  })
 
+    // TODO: check add button functionality
+    // TODO: test datepicker basic functionality
+  })
 })

@@ -46,7 +46,7 @@ import TasksService from '@/services/TasksService'
 export default {
   name: 'tasks',
   // Initialize component data (tasks set by the mounted method)
-  // Filter buttons set here as an array
+  // Filter buttons set here as an array, need filtering function in filter method
   // TODO: responsive button addition/subtraction (css is fixed)
   data () {
     return {
@@ -55,7 +55,7 @@ export default {
       filterBtns: ['Today', 'Tomorrow', 'Today/Tomorrow', 'Overdue', 'Completed', 'All']
     }
   },
-  // Filter to should the date of task due in pretty format
+  // Filter to show the date of task due in pretty format
   filters: {
     moment: function (date) {
       return moment(date).format('MMMM Do YYYY')
@@ -88,7 +88,7 @@ export default {
       this.getTasks()
       this.$router.push({ name: 'Tasks' })
     },
-    // Method to mark a task complete or incomplete based on checkbox
+    // Method to save a task complete or incomplete based on checkbox
     async checkTask (task, event) {
       await TasksService.updateTask({
         id: task._id,

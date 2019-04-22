@@ -6,7 +6,7 @@ export default {
     return Api().get('tasks')
   },
 
-  // Get Tasks for today
+  // Get Tasks based on date/complete filters (today, tomorrow, overdue, done)
   fetchFilterTasks (params) {
     return Api().get('tasks', {params: params})
   },
@@ -16,7 +16,7 @@ export default {
     return Api().post('tasks', params)
   },
 
-  // Get specific task
+  // Get specific task by id
   getTask (params) {
     return Api().get('tasks/' + params.id)
   },

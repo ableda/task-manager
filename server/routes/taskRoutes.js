@@ -71,7 +71,7 @@ router.get('/tasks', (req, res) => {
         }
       }
     }
-    if ((("startDate" in req.query) && req.query.startDate && req.query.startDate.length) &&
+    else if ((("startDate" in req.query) && req.query.startDate && req.query.startDate.length) &&
        (("endDate" in req.query) && req.query.endDate && req.query.endDate.length)) {
 
       // Check that date parameter is valid

@@ -86,9 +86,6 @@ describe('Tasks Rendering', () => {
   })
 })
 
-let url = ''
-let data = ''
-
 describe('Tasks User Functionality', () => {
   //
   it('adds `selected` class on an inactive filter button when the user clicks it', () => {
@@ -106,6 +103,7 @@ describe('Tasks User Functionality', () => {
   * We need to mock the methods, the service will be tested elsewhere
   */
   it('calls delete method correctly deleting task', async () => {
+    let data = ''
 	const wrapper = shallowMount(Task, {
 	  stubs: ['router-link'],
 	  localVue, router,
@@ -135,4 +133,6 @@ describe('Tasks User Functionality', () => {
 	expect(data).toBe('f23f023fas')
   })
 
+  // TODO: Test filter functions when buttons are clicked
+  // TODO: Test rowClass and cell filtering of date...
 })

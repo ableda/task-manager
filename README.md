@@ -58,7 +58,7 @@ Make sure to build the docker images first with
 > docker-compose build
 
 ##### Server
-To run server tests with their own docker container
+To run full integration tests (stop running containers first)
 > sh test_server.sh
 
 or locally
@@ -74,7 +74,9 @@ e2e tests ready but not implemented (nightwatch)
 
 Swagger UI integrated into the nodejs application and in the comments of all the routes
 
-After services are up, documentation is accessible at API_URL/api-docs (localhost:8081/api-docs if running with default configuration)
+After services are up, documentation is accessible at API_URL/api-docs (if running with default configuration):
+
+http://localhost:8081/api-docs
 
 ### Warnings
 

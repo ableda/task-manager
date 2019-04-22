@@ -15,7 +15,7 @@
           <button class="app_task_btn" @click="updateTask">Update</button>
         </div>
         <div>
-          <router-link v-bind:to="{ name: 'Tasks'}">Back to Task List</router-link>
+          <router-link v-bind:to="{ name: 'Tasks' }">Back to Task List</router-link>
         </div>
       </div>
   </div>
@@ -51,7 +51,7 @@ export default {
       this.date = new Date(response.data.task.date)
       this.done = response.data.task.done
     },
-    // Update task with modified data
+    // Update task with modified data, keep done field as it was
     async updateTask () {
       await TasksService.updateTask({
         id: this.$route.params.id,
