@@ -41,6 +41,7 @@ export default {
     this.getTask()
   },
   methods: {
+    // Get task and add data to component
     async getTask () {
       const response = await TasksService.getTask({
         id: this.$route.params.id
@@ -50,6 +51,7 @@ export default {
       this.date = new Date(response.data.task.date)
       this.done = response.data.task.done
     },
+    // Update task with modified data
     async updateTask () {
       await TasksService.updateTask({
         id: this.$route.params.id,

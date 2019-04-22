@@ -1,15 +1,15 @@
 {
-  "name": "server",
+  "name": "task-manager_server",
   "version": "1.0.0",
-  "description": "",
+  "description": "Microservice for managing task data",
   "main": "index.js",
   "scripts": {
     "start": "./node_modules/nodemon/bin/nodemon.js src/app.js",
     "test": "mocha test/*.js --exit"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Alex Bleda",
+  "license": "GPL-3.0",
   "dependencies": {
     "body-parser": "^1.18.2",
     "cors": "^2.8.4",

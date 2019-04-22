@@ -1,7 +1,15 @@
 # Task Manager Application
-Vue, Express, Node, Mongo with Docker-compose setup for local development. Hot Reload, SASS live compilation, among other goodies :)
 
-The application lets you
+Simple task management application that lets you get, create, edit and delete tasks as well as filter them based on due date and completion.
+
+Set up for local development with Vue, Express, Node, Mongo and Docker-compose. Hot Reload, SASS live compilation, among other goodies :)
+
+## Getting Started
+
+### Prerequisites
+
+Docker and Docker compose (https://docs.docker.com/install/)
+Node and npm (https://nodejs.org/en/download/)
 
 ### Steps to Run
 
@@ -12,6 +20,7 @@ The application lets you
 2. Navigate into the directory task-manager and copy environment variables
 
 > cd your-path-to/task-manager
+
 > cp example.env .env
 
 3. Build Docker Images
@@ -22,12 +31,13 @@ The application lets you
 
 > docker-compose up
 
-Your app should be running on (if using native docker).:
+Your app should be running on (if using native docker):
 
 http://localhost:8080
 
 Be patient and wait for all for all of the NPM warnings to finish - this will only happen once.
 
+To run in the background you can also run `docker-compose up -d`
 
 ### Configuration
 
@@ -47,15 +57,34 @@ Default should work if running on localhost.
 Make sure to build the docker images first with
 > docker-compose build
 
-To run server tests
+##### Server
+To run server tests with their own docker container
 > sh test_server.sh
 
-### API
+or locally
+> cd server && npm test
 
-Server folder, simple nodejs express application with swagger API documentation built in.
+##### Client
+To run client unit tests
+> cd client && npm run unit
 
-After services are app documentation is accessible at API_URL/api-docs (localhost:8081/api-docs if running with default configuration)
+e2e tests ready but not implemented (nightwatch)
+
+### API Documentation
+
+Swagger UI integrated into the nodejs application and in the comments of all the routes
+
+After services are up, documentation is accessible at API_URL/api-docs (localhost:8081/api-docs if running with default configuration)
 
 ### Warnings
 
 Warning: If you run 'npm install' locally in the server or client folders, you'll need to delete 'node_modules' before running again with the docker setup. The binaries need to be install in the container's OS to work.
+
+## Built With
+
+* [Vue](https://vuejs.org/) - The client web framework used
+* [Express](https://github.com/expressjs/expressjs.com) - The server web framework used
+
+## Authors
+
+* **Alex Bleda** (https://github.com/ableda)

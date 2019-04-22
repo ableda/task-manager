@@ -191,7 +191,7 @@ router.get('/tasks/:id', (req, res) => {
  *       description: Fields for the task resource
  *       schema:
  *         type: array
- *         $ref: '#/definitions/task'
+ *         $ref: '#/definitions/tasks'
  *     responses:
  *       200:
  *         description: Task updated successfully!

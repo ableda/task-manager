@@ -37,12 +37,14 @@ describe('Tasks Rendering', () => {
   })
 
   it('Correctly calls method to add task', async () => {
+    let add = false
     const wrapper = shallowMount(NewTask, {
       stubs: ['router-link'],
       localVue, router,
       methods: {
         async addTask () {
           return new Promise((resolve) => {
+            add = true
             resolve()
           })
         },
@@ -60,10 +62,11 @@ describe('Tasks Rendering', () => {
 
     await flushPromises()
 
+    // Check that the correct method was called with correct data
     expect(wrapper.vm.name).toBe('New Task Test')
     expect(wrapper.vm.description).toBe('New Task Description')
+    expect(add).toBe(true)
 
     // TODO: testing datepicker input
   })
-
 })

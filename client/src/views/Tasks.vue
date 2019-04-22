@@ -45,6 +45,9 @@ import TasksService from '@/services/TasksService'
 
 export default {
   name: 'tasks',
+  // Initialize component data (tasks set by the mounted method)
+  // Filter buttons set here as an array
+  // TODO: responsive button addition/subtraction (css is fixed)
   data () {
     return {
       tasks: [],
@@ -52,6 +55,7 @@ export default {
       filterBtns: ['Today', 'Tomorrow', 'Today/Tomorrow', 'Overdue', 'Completed', 'All']
     }
   },
+  // Filter to should the date of task due in pretty format
   filters: {
     moment: function (date) {
       return moment(date).format('MMMM Do YYYY')
@@ -61,6 +65,8 @@ export default {
     this.getTasks()
   },
   methods: {
+    // Method to set the CSS class of a row in the task table
+    // Visual indicators for complete, close due date and overdue set here
     rowClass (task) {
       var today = moment().local().startOf('day')
       var tomorrow = moment().local().add(1, 'days').endOf('day')
@@ -71,16 +77,18 @@ export default {
         'complete-soon': moment(task.date).isBetween(today, tomorrow)
       }
     },
-    // Different API calls to get list of tasks
+    // Get all task list
     async getTasks () {
       const response = await TasksService.fetchAllTasks()
       this.tasks = response.data.tasks
     },
+    // Delete button callback
     async deleteTask (id) {
       await TasksService.deleteTask(id)
       this.getTasks()
       this.$router.push({ name: 'Tasks' })
     },
+    // Method to mark a task complete or incomplete based on checkbox
     async checkTask (task, event) {
       await TasksService.updateTask({
         id: task._id,
@@ -89,6 +97,8 @@ export default {
       })
       this.$router.push({ name: 'Tasks' })
     },
+    // Filter function for all filter buttons defined in component data
+    // When adding a new button, a filter case should be added here
     async filter (event) {
       var filterParams = {}
 
@@ -109,9 +119,7 @@ export default {
           filterParams = {done: true}
           break
         default:
-          this.getTasks()
-          this.$router.push({ name: 'Tasks' })
-          return
+          break
       }
       const response = await TasksService.fetchFilterTasks(filterParams)
       if (response.data.status) {

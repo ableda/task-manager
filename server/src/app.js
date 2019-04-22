@@ -1,5 +1,5 @@
 /*
-*  Node js Express application for CRUD of tasks in a todo list
+*  Node js Express application for CRUD Rest Api to manage tasks
 *  Includes Swagger API Documentation from comments on every route (start comments with @swagger)
 *
 *  Author: Alex Bleda
@@ -40,7 +40,7 @@ var options = {
   swaggerDefinition: swaggerDefinition,
   // path to the API docs
   apis: ['./**/routes/*.js','routes.js'],// pass all in array
-  };
+};
 
 // initialize swagger-jsdoc
 var swaggerSpec = swaggerJSDoc(options);
@@ -80,7 +80,7 @@ db.once("open", function(callback){
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(config.api.base, taskRoutes)
 
-app.listen(process.env.PORT || 8081, function() {
+app.listen(process.env.SERVER_PORT || 8081, function() {
   app.emit('APP_STARTED')
 })
 
