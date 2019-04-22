@@ -50,6 +50,12 @@ Make sure to build the docker images first with
 To run server tests
 > sh test_server.sh
 
+### API
+
+Server folder, simple nodejs express application with swagger API documentation built in.
+
+After services are app documentation is accessible at API_URL/api-docs (localhost:8081/api-docs if running with default configuration)
+
 ### Warnings
 
 Warning: If you run 'npm install' locally in the server or client folders, you'll need to delete 'node_modules' before running again with the docker setup. The binaries need to be install in the container's OS to work.

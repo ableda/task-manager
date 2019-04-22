@@ -77,7 +77,6 @@ export default {
       this.tasks = response.data.tasks
     },
     async deleteTask (id) {
-      console.log('deleting task')
       await TasksService.deleteTask(id)
       this.getTasks()
       this.$router.push({ name: 'Tasks' })
@@ -111,7 +110,6 @@ export default {
           break
         default:
           this.getTasks()
-          console.log('get all tasks')
           this.$router.push({ name: 'Tasks' })
           return
       }

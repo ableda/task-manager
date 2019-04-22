@@ -18,7 +18,7 @@ describe('Tasks Rendering', () => {
     expect(typeof Task.data).toBe('function')
     const defaultData = Task.data()
     expect(defaultData.tasks).toEqual([])
-	expect(defaultData.activeFilter).toBe(1)
+	expect(defaultData.activeFilter).toBe('All')
   })
 
   it('should render correct contents without table', () => {
@@ -54,7 +54,7 @@ describe('Tasks Rendering', () => {
 		}
 	  }
 	})
-	
+
 	// With task data we should see a table, with two of everything
 	expect(wrapper.findAll(".table-wrap").length).toBe(1)
 	expect(wrapper.findAll("#checkbox").length).toBe(2)
@@ -62,8 +62,6 @@ describe('Tasks Rendering', () => {
 	// Get first task row
 	const firstTask = wrapper.findAll('tr').at(1)
 
-	//console.log(firstTask.html())
-	
 	// Checkbox, should have complete class as it is due today, should not be checked\
 	const firstCheckBox = firstTask.findAll("td").at(0)
 	expect(firstCheckBox.contains("input"))
@@ -84,7 +82,7 @@ describe('Tasks Rendering', () => {
 	// Last column should contain Edit and Delete buttons
 	expect(firstTask.findAll("td").at(4).find('router-link-stub').text()).toEqual('Edit')
 	expect(firstTask.findAll("td").at(4).find('a').text()).toEqual('Delete')
-	
+
   })
 })
 
@@ -128,7 +126,7 @@ describe('Tasks User Functionality', () => {
 		},
 	  }
 	})
-	
+
 	// Simulate Delete button click
 	wrapper.findAll('tr').at(1).findAll("td").at(4).find('a').trigger("click")
 
