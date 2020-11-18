@@ -7,6 +7,11 @@ RUN ["chmod", "+x", "entrypoint/entrypoint.sh"]
 # Copy or mount node app here
 WORKDIR /data/
 
+# Install app dependencies
+COPY package*.json ./
+
+RUN npm install
+
 EXPOSE 8080
 
 ENTRYPOINT ["/entrypoint/entrypoint.sh"]
